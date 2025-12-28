@@ -3,112 +3,241 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Maths Exam with Data Export/Import</title>
-    <style>body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    background-color: #f4f7f9;
-    color: #333;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    min-height: 100vh;
-    margin: 0;
-    padding: 20px;
-}
+    <title>AI Maths Exam with Discord Login</title>
+    <style>
+        /* General Body & App Container Styles */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            background-color: #ecf0f1;
+            margin: 0;
+            padding: 20px;
+        }
 
-.app-container {
-    background-color: white;
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    width: 800px;
-    max-width: 95%;
-    padding: 30px;
-}
+        .app-container {
+            width: 100%;
+            max-width: 800px;
+            background: white;
+            border-radius: 8px;
+            padding: 20px 40px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
 
-h1, h2 {
-    color: #2c3e50;
-    text-align: center;
-}
+        h1, h2 {
+            color: #2c3e50;
+            text-align: center;
+        }
 
-/* Data Management Section */
-.data-container {
-    background-color: #f8f9fa;
-    border: 1px solid #e9ecef;
-    border-radius: 8px;
-    padding: 20px;
-    margin-bottom: 20px;
-    text-align: center;
-}
-.data-btn {
-    background-color: #1abc9c;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 10px 15px;
-    cursor: pointer;
-    margin: 5px;
-    transition: background-color 0.2s;
-}
-.data-btn:hover {
-    background-color: #16a085;
-}
+        /* User Profile & Login Styles */
+        .user-profile-container {
+            display: flex;
+            align-items: center;
+            background-color: #f2f3f5;
+            border-radius: 8px;
+            padding: 10px 15px;
+            margin-bottom: 20px;
+        }
 
-/* Stats Section */
-.stats-container {
-    background-color: #ecf0f1;
-    border-radius: 8px;
-    padding: 20px;
-    margin-bottom: 30px;
-    text-align: center;
-}
+        #user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 15px;
+        }
 
-#stats-display {
-    padding: 15px;
-    background: #fff;
-    border-radius: 5px;
-    margin-bottom: 15px;
-    white-space: pre-wrap; /* Allows formatted stats display */
-}
+        #user-info p {
+            margin: 0;
+            font-size: 1.1em;
+        }
 
-#generate-exam-btn {
-    background-color: #3498db;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 12px 20px;
-    cursor: pointer;
-    font-size: 1em;
-    transition: background-color 0.2s;
-}
-#generate-exam-btn:hover {
-    background-color: #2980b9;
-}
+        #logout-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 5px;
+        }
 
-/* Quiz Section */
-#quiz-container { text-align: center; }
-.working-out-container { text-align: left; margin: 25px 0; }
-#working-out-area {
-    width: 100%;
-    padding: 10px;
-    font-family: inherit;
-    font-size: 1em;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    box-sizing: border-box;
-}
-.btn-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 10px; margin: 20px 0; }
-.btn { background-color: #95a5a6; border: none; border-radius: 5px; padding: 15px; color: white; cursor: pointer; font-size: 1em; transition: background-color 0.2s; }
-.btn:hover:not(:disabled) { background-color: #7f8c8d; }
-.btn.correct { background-color: #2ecc71; }
-.btn.incorrect { background-color: #e74c3c; }
-.btn:disabled { cursor: not-allowed; opacity: 0.7; }
-#ai-feedback-container { margin-top: 30px; padding: 15px; background-color: #f8f9fa; border: 1px solid #e9ecef; border-radius: 8px; text-align: left; }
-#ai-feedback-container h3 { margin-top: 0; }
-#ai-feedback { min-height: 20px; }
-.hide { display: none; }</style>
+        #logout-btn:hover {
+            background: #c0392b;
+        }
+
+        .discord-btn {
+            display: block;
+            background-color: #5865F2;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-bottom: 20px;
+            cursor: pointer;
+        }
+
+        .discord-btn:hover {
+            background-color: #4752C4;
+        }
+
+        /* Data Management & Stats Styles */
+        .data-container, .stats-container {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .data-btn {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+        .data-btn:hover {
+            background-color: #2980b9;
+        }
+
+        #stats-display {
+            background-color: #e9ecef;
+            padding: 15px;
+            border-radius: 5px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-family: 'Courier New', Courier, monospace;
+            margin-bottom: 15px;
+        }
+
+        #generate-exam-btn {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.2em;
+            cursor: pointer;
+            background-color: #2ecc71;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+
+        #generate-exam-btn:disabled {
+            background-color: #95a5a6;
+            cursor: not-allowed;
+        }
+
+        /* Quiz Styles */
+        #quiz-container {
+            margin-top: 20px;
+        }
+
+        #topic-title {
+            font-size: 1.2em;
+            color: #7f8c8d;
+            text-align: center;
+        }
+
+        #question {
+            font-size: 1.5em;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        #answer-buttons {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .btn {
+            padding: 15px;
+            font-size: 1.1em;
+            cursor: pointer;
+            background-color: #bdc3c7;
+            border: 2px solid #95a5a6;
+            border-radius: 5px;
+            color: #2c3e50;
+        }
+
+        .btn:hover:not(:disabled) {
+            background-color: #95a5a6;
+        }
+
+        .btn.correct {
+            background-color: #2ecc71;
+            border-color: #27ae60;
+            color: white;
+        }
+
+        .btn.incorrect {
+            background-color: #e74c3c;
+            border-color: #c0392b;
+            color: white;
+        }
+
+        .btn:disabled {
+            cursor: not-allowed;
+        }
+
+        #working-out-area {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 10px;
+            font-size: 1em;
+            min-height: 80px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        #ai-feedback {
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #f2f3f5;
+            border-left: 5px solid #3498db;
+            border-radius: 5px;
+        }
+
+        #next-btn {
+            float: right;
+            padding: 10px 20px;
+            font-size: 1em;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* Utility Class */
+        .hide {
+            display: none;
+        }
+
+    </style>
 </head>
 <body>
     <div class="app-container">
+        <!-- User Profile Section -->
+        <div id="user-profile" class="user-profile-container hide">
+            <img id="user-avatar" src="" alt="User Avatar">
+            <div id="user-info">
+                <p>Welcome, <strong id="user-name"></strong>!</p>
+                <button id="logout-btn">Logout</button>
+            </div>
+        </div>
+
+        <!-- Login Button -->
+        <a id="login-btn" class="discord-btn">Login with Discord</a>
+
         <h1>Adaptive Maths Exam</h1>
 
         <!-- Data Management Section -->
@@ -120,378 +249,423 @@ h1, h2 {
             <input type="file" id="import-file" class="hide" accept=".json">
         </div>
 
-        <!-- Performance Stats Section -->
+        <!-- Stats & Exam Generation -->
         <div class="stats-container">
             <h2>Your Performance</h2>
-            <div id="stats-display">Click "Generate Exam" or import data to start.</div>
-            <button id="generate-exam-btn">Generate New Exam</button>
+            <div id="stats-display">Login to track your performance.</div>
+            <button id="generate-exam-btn" disabled>Generate New Exam</button>
         </div>
 
-        <!-- Quiz Section -->
+        <!-- Quiz Area -->
         <div id="quiz-container" class="hide">
-            <h2 id="topic-title"></h2>
-            <p id="question"></p>
-            
-            <div class="working-out-container">
-                <label for="working-out-area">Show your working out here:</label>
-                <textarea id="working-out-area" rows="5" placeholder="Type your steps here..."></textarea>
+            <h3 id="topic-title"></h3>
+            <div id="question">Question Text</div>
+            <div id="answer-buttons">
+                <!-- Answer buttons will be dynamically inserted here -->
             </div>
-
-            <div id="answer-buttons" class="btn-grid"></div>
-            
-            <div id="ai-feedback-container">
-                <h3>AI Feedback</h3>
-                <div id="ai-feedback">Waiting for your answer...</div>
-            </div>
-
-            <button id="next-btn" class="next-btn btn hide">Next Question</button>
+            <label for="working-out-area">Your Working Out:</label>
+            <textarea id="working-out-area"></textarea>
+            <div id="ai-feedback">Waiting for your answer...</div>
+            <button id="next-btn" class="hide">Next</button>
         </div>
     </div>
-    <script>// --- DOM ELEMENTS ---
-const exportBtn = document.getElementById('export-btn');
-const importBtn = document.getElementById('import-btn');
-const importFile = document.getElementById('import-file');
-const statsDisplay = document.getElementById('stats-display');
-const generateExamBtn = document.getElementById('generate-exam-btn');
-const quizContainer = document.getElementById('quiz-container');
-const topicTitleElement = document.getElementById('topic-title');
-const questionElement = document.getElementById('question');
-const workingOutArea = document.getElementById('working-out-area');
-const answerButtonsElement = document.getElementById('answer-buttons');
-const aiFeedbackElement = document.getElementById('ai-feedback');
-const nextButton = document.getElementById('next-btn');
 
-// --- DYNAMIC QUESTION GENERATION ---
+    <script>
+        // --- CONFIGURATION ---
+        const CLIENT_ID = '1421494912267976775'; // YOUR CLIENT ID
+        const REDIRECT_URI = 'sparklearnweb.github.io'; // YOUR URL
+        const SCOPES = 'identify';
 
-// Helper function to get a random element from an array
-function getRandom(arr) {
-    return arr[Math.floor(Math.random() * arr.length)];
-}
+        // --- DOM ELEMENTS ---
+        const loginBtn = document.getElementById('login-btn');
+        const logoutBtn = document.getElementById('logout-btn');
+        const userProfileContainer = document.getElementById('user-profile');
+        const userNameEl = document.getElementById('user-name');
+        const userAvatarEl = document.getElementById('user-avatar');
 
-// Helper function to shuffle an array
-function shuffle(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-    }
-    return array;
-}
+        const exportBtn = document.getElementById('export-btn');
+        const importBtn = document.getElementById('import-btn');
+        const importFile = document.getElementById('import-file');
+        const statsDisplay = document.getElementById('stats-display');
+        const generateExamBtn = document.getElementById('generate-exam-btn');
+        const quizContainer = document.getElementById('quiz-container');
+        const topicTitleElement = document.getElementById('topic-title');
+        const questionElement = document.getElementById('question');
+        const workingOutArea = document.getElementById('working-out-area');
+        const answerButtonsElement = document.getElementById('answer-buttons');
+        const aiFeedbackElement = document.getElementById('ai-feedback');
+        const nextButton = document.getElementById('next-btn');
 
-const questionTemplates = [
-    {
-        topic: 'Algebra',
-        generator: () => {
-            const squares = [16, 25, 36, 49, 64, 81, 100, 121, 144];
-            const numSquared = getRandom(squares);
-            const num = Math.sqrt(numSquared);
-            const questionText = `Factorise x² - ${numSquared}.`;
-            
-            const correctAnswer = `(x - ${num})(x + ${num})`;
-            const distractors = [
-                `(x - ${numSquared})(x + 1)`, // Common error
-                `x(x - ${numSquared})`,
-                `(x + ${num})²`,
-                `(x - ${num})²`
-            ];
+        let currentExam = [];
+        let currentQuestionIndex = 0;
 
-            const answers = [{ text: correctAnswer, correct: true }];
-            shuffle(distractors).slice(0, 3).forEach(d => answers.push({ text: d, correct: false }));
+        // --- AUTHENTICATION LOGIC ---
+        function handleLogin() {
+            const authUrl = `discord.com{CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=token&scope=${SCOPES}`;
+            window.location.href = authUrl;
+        }
 
-            return {
+        function getAccessToken() {
+            const fragment = new URLSearchParams(window.location.hash.slice(1));
+            const [accessToken] = [fragment.get('access_token')];
+            if (accessToken) {
+                window.history.replaceState(null, null, ' ');
+            }
+            return accessToken;
+        }
+
+        async function fetchDiscordUser(token) {
+            try {
+                const response = await fetch('discord.com', {
+                    headers: { authorization: `Bearer ${token}` },
+                });
+                if (!response.ok) throw new Error('Failed to fetch user data.');
+                return await response.json();
+            } catch (error) {
+                console.error(error);
+                return null;
+            }
+        }
+
+        function updateUIForLoggedInUser(user) {
+            userProfileContainer.classList.remove('hide');
+            loginBtn.classList.add('hide');
+            generateExamBtn.disabled = false;
+
+            userNameEl.textContent = user.username;
+            userAvatarEl.src = `cdn.discordapp.com{user.id}/${user.avatar}.png`;
+
+            localStorage.setItem('userKey', `mathsPerformance_${user.id}`);
+            displayStats();
+        }
+
+        function handleLogout() {
+            localStorage.removeItem('discord_token');
+            localStorage.removeItem('userKey');
+            userProfileContainer.classList.add('hide');
+            loginBtn.classList.remove('hide');
+            generateExamBtn.disabled = true;
+            statsDisplay.textContent = 'Login to track your performance.';
+            quizContainer.classList.add('hide');
+        }
+
+        // --- DATA MANAGEMENT FUNCTIONS ---
+        function exportData() {
+            const data = getPerformanceStats();
+            if (Object.keys(data).length === 0) {
+                alert("No performance data to export yet!");
+                return;
+            }
+            const jsonString = JSON.stringify(data, null, 2);
+            const blob = new Blob([jsonString], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `maths-progress-${userNameEl.textContent}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function importData(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const importedData = JSON.parse(e.target.result);
+                    const userKey = localStorage.getItem('userKey');
+                    if (typeof importedData === 'object' && importedData !== null && userKey) {
+                        localStorage.setItem(userKey, JSON.stringify(importedData));
+                        displayStats();
+                        alert("Progress imported successfully!");
+                    } else {
+                        throw new Error("Invalid file or not logged in.");
+                    }
+                } catch (error) {
+                    alert("Error importing file. Please ensure it's a valid progress file and you are logged in.");
+                    console.error(error);
+                }
+            };
+            reader.readAsText(file);
+            importFile.value = '';
+        }
+
+        // --- STATE & STATS MANAGEMENT ---
+        function getPerformanceStats() {
+            const userKey = localStorage.getItem('userKey');
+            if (!userKey) return {};
+            return JSON.parse(localStorage.getItem(userKey)) || {};
+        }
+
+        function updatePerformanceStats(topic, isCorrect) {
+            const userKey = localStorage.getItem('userKey');
+            if (!userKey) return;
+
+            const stats = getPerformanceStats();
+            if (!stats[topic]) stats[topic] = { correct: 0, incorrect: 0 };
+            isCorrect ? stats[topic].correct++ : stats[topic].incorrect++;
+            localStorage.setItem(userKey, JSON.stringify(stats));
+        }
+
+        function displayStats() {
+            const stats = getPerformanceStats();
+            if (Object.keys(stats).length === 0) {
+                statsDisplay.textContent = 'No performance data found. Take a test to start!';
+                return;
+            }
+            statsDisplay.textContent = JSON.stringify(stats, null, 2);
+        }
+
+        // --- DYNAMIC QUESTION GENERATION ---
+        const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+        const shuffle = (array) => {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        };
+
+        const questionTemplates = [
+            {
                 topic: 'Algebra',
-                question: questionText,
-                answers: shuffle(answers),
-                keywords: ['difference', 'squares', `sqrt(${numSquared})`, `${num}`]
-            };
-        }
-    },
-    {
-        topic: 'Geometry',
-        generator: () => {
-            const radius = getRandom([3, 4, 5, 6, 7, 8, 10]);
-            const area = (Math.PI * radius * radius).toFixed(1);
-            const circumference = (2 * Math.PI * radius).toFixed(1);
-            const diameterSquared = (radius * 2) * (radius * 2);
-
-            const questionText = `A circle has a radius of ${radius}cm. What is its area? (Use π and round to 1 d.p.)`;
-            const correctAnswer = `${area}cm²`;
-            
-            const answers = [
-                { text: correctAnswer, correct: true },
-                { text: `${circumference}cm²`, correct: false }, // Confuses with circumference
-                { text: `${diameterSquared}cm²`, correct: false }, // Confuses radius with diameter
-                { text: `${area}cm`, correct: false } // Incorrect unit
-            ];
-            
-            return {
+                generator: () => {
+                    const a = getRandomInt(2, 5);
+                    const b = getRandomInt(6, 10);
+                    const constTerm = a * b;
+                    const xTerm = a + b;
+                    return {
+                        topic: 'Algebra',
+                        question: `Factorise x² + ${xTerm}x + ${constTerm}.`,
+                        answers: shuffle([
+                            { text: `(x + ${a})(x + ${b})`, correct: true },
+                            { text: `(x - ${a})(x - ${b})`, correct: false },
+                            { text: `(x + ${constTerm})(x + 1)`, correct: false },
+                            { text: `x(x + ${xTerm}) + ${constTerm}`, correct: false }
+                        ]),
+                        keywords: ['factorise', 'quadratic', `+ ${a}`, `+ ${b}`]
+                    };
+                }
+            },
+            {
                 topic: 'Geometry',
-                question: questionText,
-                answers: shuffle(answers),
-                keywords: ['πr²', 'pi * r * r', `${radius} * ${radius}`]
-            };
-        }
-    },
-    {
-        topic: 'Ratio',
-        generator: () => {
-            const ratioA = getRandom([2, 3, 4]);
-            const ratioB = getRandom([5, 6, 7]);
-            const totalParts = ratioA + ratioB;
-            const multiplier = getRandom([10, 20, 30]);
-            const totalAmount = totalParts * multiplier;
-            
-            const shareA = ratioA * multiplier;
-            const shareB = ratioB * multiplier;
-
-            const questionText = `Share £${totalAmount} in the ratio ${ratioA}:${ratioB}.`;
-            const correctAnswer = `£${shareA} : £${shareB}`;
-
-            const answers = [
-                { text: correctAnswer, correct: true },
-                { text: `£${shareB} : £${shareA}`, correct: false }, // Swapped ratio
-                { text: `£${totalAmount / ratioA} : £${totalAmount / ratioB}`, correct: false }, // Incorrect division
-                { text: `£${totalAmount / 2} : £${totalAmount / 2}`, correct: false } // Divided by 2
-            ];
-
-            return {
+                generator: () => {
+                    const radius = getRandomInt(3, 10);
+                    const area = (Math.PI * radius * radius).toFixed(1);
+                    const circumference = (2 * Math.PI * radius).toFixed(1);
+                    return {
+                        topic: 'Geometry',
+                        question: `A circle has a radius of ${radius}cm. What is its circumference? (Use π and round to 1 d.p.)`,
+                        answers: shuffle([
+                            { text: `${circumference}cm`, correct: true },
+                            { text: `${area}cm`, correct: false },
+                            { text: `${radius * 2}cm`, correct: false },
+                            { text: `${circumference}cm²`, correct: false }
+                        ]),
+                        keywords: ['2πr', 'pi * d', `2 * ${radius}`]
+                    };
+                }
+            },
+            {
                 topic: 'Ratio',
-                question: questionText,
-                answers: shuffle(answers),
-                keywords: [`${ratioA}+${ratioB}`, `${totalParts} parts`, `${totalAmount} / ${totalParts}`]
-            };
-        }
-    },
-    {
-        topic: 'Probability',
-        generator: () => {
-            const numA = getRandom([3, 4, 5, 6]);
-            const numB = getRandom([7, 8, 9, 10]);
-            const total = numA + numB;
-            
-            const questionText = `A bag has ${numA} red and ${numB} blue balls. What is the probability of picking a RED ball?`;
-            const correctAnswer = `${numA}/${total}`;
-
-            const answers = [
-                { text: correctAnswer, correct: true },
-                { text: `${numB}/${total}`, correct: false }, // Probability of the other event
-                { text: `${numA}/${numB}`, correct: false }, // Ratio as a fraction
-                { text: `${numB}/${numA}`, correct: false } // Inverse ratio
-            ];
-            
-            return {
+                generator: () => {
+                    const ratioA = getRandomInt(2, 4);
+                    const ratioB = getRandomInt(5, 7);
+                    const totalParts = ratioA + ratioB;
+                    const multiplier = getRandomInt(5, 15);
+                    const totalAmount = totalParts * multiplier;
+                    const shareA = ratioA * multiplier;
+                    const shareB = ratioB * multiplier;
+                    return {
+                        topic: 'Ratio',
+                        question: `Share £${totalAmount} in the ratio ${ratioA}:${ratioB}.`,
+                        answers: shuffle([
+                            { text: `£${shareA} : £${shareB}`, correct: true },
+                            { text: `£${shareB} : £${shareA}`, correct: false },
+                            { text: `£${totalAmount / ratioA} : £${totalAmount / ratioB}`, correct: false },
+                            { text: `£${totalAmount - shareB} : £${totalAmount-shareA}`, correct: false }
+                        ]),
+                        keywords: [`${ratioA}+${ratioB}`, `${totalParts}`, `${totalAmount} / ${totalParts}`]
+                    };
+                }
+            },
+            {
                 topic: 'Probability',
-                question: questionText,
-                answers: shuffle(answers),
-                keywords: ['total', `${numA}+${numB}`, `${total}`, 'red', `${numA}/${total}`]
-            };
+                generator: () => {
+                    const red = getRandomInt(3, 8);
+                    const blue = getRandomInt(3, 8);
+                    const total = red + blue;
+                    return {
+                        topic: 'Probability',
+                        question: `A bag contains ${red} red balls and ${blue} blue balls. What is the probability of picking a red ball?`,
+                        answers: shuffle([
+                            { text: `${red}/${total}`, correct: true },
+                            { text: `${blue}/${total}`, correct: false },
+                            { text: `${red}/${blue}`, correct: false },
+                            { text: `1/${total}`, correct: false }
+                        ]),
+                        keywords: ['probability', 'total', `${red} + ${blue}`, `${total}`]
+                    };
+                }
+            }
+        ];
+
+        const generateQuestion = (topic) => {
+            const template = questionTemplates.find(t => t.topic === topic) || questionTemplates[Math.floor(Math.random() * questionTemplates.length)];
+            return template.generator();
+        };
+
+        // --- SIMULATED AI & EXAM LOGIC ---
+        function mockAIHttpApi(performanceData) {
+            return new Promise(resolve => {
+                setTimeout(() => {
+                    const exam = [];
+                    const topics = Object.keys(performanceData);
+                    let weaknesses = topics.filter(t => {
+                        const { correct = 0, incorrect = 0 } = performanceData[t];
+                        const total = correct + incorrect;
+                        return total > 0 && (correct / total) < 0.6;
+                    });
+
+                    // Generate 4 questions
+                    // 2 questions on weakest topics, 2 random
+                    for(let i = 0; i < 2; i++) {
+                        if (weaknesses.length > 0) {
+                            exam.push(generateQuestion(weaknesses[i % weaknesses.length]));
+                        } else {
+                            exam.push(generateQuestion());
+                        }
+                    }
+                    for(let i = 0; i < 2; i++) {
+                        exam.push(generateQuestion());
+                    }
+
+                    resolve(shuffle(exam));
+                }, 500);
+            });
         }
-    }
-];
 
-function generateQuestion() {
-    const template = getRandom(questionTemplates);
-    return template.generator();
-}
+        async function startExam() {
+            generateExamBtn.textContent = 'Generating...';
+            generateExamBtn.disabled = true;
 
-let currentExam = [];
-let currentQuestionIndex = 0;
+            const stats = getPerformanceStats();
+            currentExam = await mockAIHttpApi(stats);
+            currentQuestionIndex = 0;
+            quizContainer.classList.remove('hide');
+            showQuestion(currentExam[currentQuestionIndex]);
 
-// --- DATA MANAGEMENT FUNCTIONS (Same as before) ---
-function exportData() {
-    const data = getPerformanceStats();
-    if (Object.keys(data).length === 0) {
-        alert("No performance data to export yet!");
-        return;
-    }
-    const jsonString = JSON.stringify(data, null, 2);
-    const blob = new Blob([jsonString], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'maths-progress.json';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-}
+            generateExamBtn.textContent = 'Generate New Exam';
+            generateExamBtn.disabled = false;
+        }
 
-function importData(event) {
-    const file = event.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = function(e) {
-        try {
-            const importedData = JSON.parse(e.target.result);
-            if (typeof importedData === 'object' && importedData !== null) {
-                localStorage.setItem('mathsPerformance', JSON.stringify(importedData));
-                displayStats();
-                alert("Progress imported successfully!");
+        // --- UI & QUIZ FLOW FUNCTIONS ---
+        function showQuestion(question) {
+            resetState();
+            topicTitleElement.textContent = `Topic: ${question.topic}`;
+            questionElement.textContent = question.question;
+            question.answers.forEach(answer => {
+                const button = document.createElement('button');
+                button.innerText = answer.text;
+                button.classList.add('btn');
+                if (answer.correct) button.dataset.correct = 'true';
+                button.addEventListener('click', selectAnswer);
+                answerButtonsElement.appendChild(button);
+            });
+        }
+
+        function resetState() {
+            nextButton.classList.add('hide');
+            aiFeedbackElement.innerHTML = "Waiting for your answer...";
+            aiFeedbackElement.style.color = '#333';
+            workingOutArea.value = '';
+            while (answerButtonsElement.firstChild) {
+                answerButtonsElement.removeChild(answerButtonsElement.firstChild);
+            }
+        }
+
+        function selectAnswer(e) {
+            const selectedButton = e.target;
+            const isCorrect = selectedButton.dataset.correct === 'true';
+
+            updatePerformanceStats(currentExam[currentQuestionIndex].topic, isCorrect);
+
+            Array.from(answerButtonsElement.children).forEach(button => {
+                button.disabled = true;
+                setStatusClass(button, button.dataset.correct === 'true');
+            });
+
+            provideAiFeedback(isCorrect);
+
+            if (currentExam.length > currentQuestionIndex + 1) {
+                nextButton.classList.remove('hide');
             } else {
-                throw new Error("Invalid file format.");
+                generateExamBtn.textContent = 'Take Another Exam!';
+                displayStats();
             }
-        } catch (error) {
-            alert("Error importing file. Please ensure it's a valid progress file.");
-            console.error(error);
         }
-    };
-    reader.readAsText(file);
-    importFile.value = '';
-}
 
+        function setStatusClass(element, correct) {
+            element.classList.add(correct ? 'correct' : 'incorrect');
+        }
 
-// --- STATE & STATS MANAGEMENT (Same as before) ---
-function getPerformanceStats() {
-    return JSON.parse(localStorage.getItem('mathsPerformance')) || {};
-}
+        function provideAiFeedback(isCorrect) {
+            const question = currentExam[currentQuestionIndex];
+            const userWorking = workingOutArea.value.toLowerCase();
+            let feedback = '';
 
-function updatePerformanceStats(topic, isCorrect) {
-    const stats = getPerformanceStats();
-    if (!stats[topic]) stats[topic] = { correct: 0, incorrect: 0 };
-    isCorrect ? stats[topic].correct++ : stats[topic].incorrect++;
-    localStorage.setItem('mathsPerformance', JSON.stringify(stats));
-}
-
-function displayStats() {
-    const stats = getPerformanceStats();
-    if (Object.keys(stats).length === 0) {
-        statsDisplay.textContent = 'No performance data found. Take a test to start!';
-        return;
-    }
-    statsDisplay.textContent = JSON.stringify(stats, null, 2);
-}
-
-// --- SIMULATED AI & EXAM LOGIC ---
-function mockAIHttpApi(performanceData) {
-    console.log("Simulating AI analysis of data:", performanceData);
-    return new Promise(resolve => {
-        setTimeout(() => {
-            const exam = [];
-            const topics = shuffle(questionTemplates.map(t => t.topic)); // Get unique topics
-            
-            // Simple logic: generate one question per topic for variety
-            for (let i = 0; i < 4; i++) {
-                exam.push(generateQuestion());
+            if (isCorrect) {
+                feedback = '<strong>Correct! Well done.</strong>';
+                aiFeedbackElement.style.color = '#27ae60';
+                if (question.keywords.some(kw => userWorking.includes(kw))) {
+                    feedback += '<br>Your working out shows you understand the method.';
+                }
+            } else {
+                feedback = '<strong>Not quite.</strong> ';
+                aiFeedbackElement.style.color = '#c0392b';
+                const correctAnswer = question.answers.find(a => a.correct).text;
+                if (question.keywords.some(kw => userWorking.includes(kw))) {
+                    feedback += `You were on the right track in your working out, but check your calculations. The correct answer is ${correctAnswer}.`;
+                } else {
+                    feedback += `The correct answer is ${correctAnswer}.<br>Key steps involve: ${question.keywords.join(', ')}.`;
+                }
             }
-            resolve(exam);
-        }, 500); // Simulate network delay
-    });
-}
-
-async function startExam() {
-    generateExamBtn.textContent = 'Generating...';
-    generateExamBtn.disabled = true;
-
-    const stats = getPerformanceStats();
-    currentExam = await mockAIHttpApi(stats);
-    currentQuestionIndex = 0;
-    quizContainer.classList.remove('hide');
-    showQuestion(currentExam[currentQuestionIndex]);
-
-    generateExamBtn.textContent = 'Generate New Exam';
-    generateExamBtn.disabled = false;
-}
-
-// --- UI FUNCTIONS (showQuestion, resetState, selectAnswer, provideAiFeedback) ---
-// These are mostly the same as the fully-working previous version.
-
-function showQuestion(question) {
-    resetState();
-    topicTitleElement.textContent = `Topic: ${question.topic}`;
-    questionElement.textContent = question.question;
-    question.answers.forEach(answer => {
-        const button = document.createElement('button');
-        button.innerText = answer.text;
-        button.classList.add('btn');
-        if (answer.correct) {
-            button.dataset.correct = 'true';
+            aiFeedbackElement.innerHTML = feedback;
         }
-        button.addEventListener('click', selectAnswer);
-        answerButtonsElement.appendChild(button);
-    });
-}
 
-function resetState() {
-    nextButton.classList.add('hide');
-    aiFeedbackElement.textContent = "Waiting for your answer...";
-    aiFeedbackElement.style.color = '#333';
-    workingOutArea.value = '';
-    while (answerButtonsElement.firstChild) {
-        answerButtonsElement.removeChild(answerButtonsElement.firstChild);
-    }
-}
+        // --- INITIALIZATION ---
+        window.onload = async () => {
+            const urlToken = getAccessToken();
+            let storedToken = localStorage.getItem('discord_token');
 
-function selectAnswer(e) {
-    const selectedButton = e.target;
-    const isCorrect = selectedButton.dataset.correct === 'true';
-    
-    updatePerformanceStats(currentExam[currentQuestionIndex].topic, isCorrect);
+            if (urlToken) {
+                localStorage.setItem('discord_token', urlToken);
+                storedToken = urlToken;
+            }
 
-    Array.from(answerButtonsElement.children).forEach(button => {
-        button.disabled = true;
-        setStatusClass(button, button.dataset.correct === 'true');
-    });
+            if (storedToken) {
+                const user = await fetchDiscordUser(storedToken);
+                if (user) {
+                    updateUIForLoggedInUser(user);
+                } else {
+                    handleLogout();
+                }
+            }
 
-    provideAiFeedback(isCorrect);
-
-    if (currentExam.length > currentQuestionIndex + 1) {
-        nextButton.classList.remove('hide');
-    } else {
-        generateExamBtn.textContent = 'Take Another Exam!';
-        displayStats(); // Update stats display at the end of the exam
-    }
-}
-
-function setStatusClass(element, correct) {
-    if (correct) {
-        element.classList.add('correct');
-    } else {
-        element.classList.add('incorrect');
-    }
-}
-
-function provideAiFeedback(isCorrect) {
-    const question = currentExam[currentQuestionIndex];
-    const userWorking = workingOutArea.value.toLowerCase();
-    let feedback = '';
-
-    if (isCorrect) {
-        feedback = 'Correct! Well done.';
-        aiFeedbackElement.style.color = '#27ae60';
-        const hasCorrectWorking = question.keywords.some(kw => userWorking.includes(kw));
-        if (hasCorrectWorking) {
-            feedback += ' Your working out shows you understand the method.';
-        } else if (userWorking.length > 0) {
-            feedback += ' Your working out doesn\'t seem to match the standard method, but you got the right answer, which is great!';
-        }
-    } else {
-        feedback = 'Not quite. ';
-        aiFeedbackElement.style.color = '#c0392b';
-        const hasPartialWorking = question.keywords.some(kw => userWorking.includes(kw));
-        if (hasPartialWorking) {
-            feedback += 'It looks like you were on the right track in your working out. Double-check your calculations.';
-        } else {
-            const correctAnswer = question.answers.find(a => a.correct).text;
-            feedback += `The correct answer is ${correctAnswer}. Let's review the method. Key steps often involve: ${question.keywords.join(', ')}.`;
-        }
-    }
-    aiFeedbackElement.textContent = feedback;
-}
-
-
-// --- EVENT LISTENERS ---
-exportBtn.addEventListener('click', exportData);
-importBtn.addEventListener('click', () => importFile.click());
-importFile.addEventListener('change', importData);
-
-generateExamBtn.addEventListener('click', startExam);
-
-nextButton.addEventListener('click', () => {
-    currentQuestionIndex++;
-    showQuestion(currentExam[currentQuestionIndex]);
-});
-
-// --- INITIALIZE ---
-displayStats();
-</script>
+            // Add event listeners
+            loginBtn.addEventListener('click', handleLogin);
+            logoutBtn.addEventListener('click', handleLogout);
+            exportBtn.addEventListener('click', exportData);
+            importBtn.addEventListener('click', () => importFile.click());
+            importFile.addEventListener('change', importData);
+            generateExamBtn.addEventListener('click', startExam);
+            nextButton.addEventListener('click', () => {
+                currentQuestionIndex++;
+                showQuestion(currentExam[currentQuestionIndex]);
+            });
+        };
+    </script>
 </body>
 </html>
