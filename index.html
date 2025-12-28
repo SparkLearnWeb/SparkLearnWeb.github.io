@@ -669,50 +669,70 @@
     </script><!-- Discord OAuth2 --><script>
     (function() {
         const CLIENT_ID = '1421494912267976775';
-        const REDIRECT_URI = 'https://sparklearnweb.github.io';
+        const REDIRECT_URI = 'https://sparklearnweb.github.io'; 
 
-        // 1. Fix the login button's click behavior
         const loginBtn = document.getElementById('login-btn');
+        const logoutBtn = document.getElementById('logout-btn');
+        const userProfile = document.getElementById('user-profile');
+        const userName = document.getElementById('user-name');
+        const userAvatar = document.getElementById('user-avatar');
+        const statsDisplay = document.getElementById('stats-display');
+        const generateBtn = document.getElementById('generate-exam-btn');
+
+        // 1. Handle Login Click
         if (loginBtn) {
             loginBtn.addEventListener('click', (e) => {
-                e.preventDefault(); // Stop default link behavior
+                e.preventDefault();
+                // Use response_type=token for GitHub Pages (no backend)
                 const authUrl = `discord.com{CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=token&scope=identify`;
                 window.location.href = authUrl;
             });
         }
 
-        // 2. Use addEventListener so we don't overwrite your existing window.onload
+        // 2. Handle Logout
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', () => {
+                localStorage.removeItem('discord_access_token');
+                window.location.href = REDIRECT_URI;
+            });
+        }
+
+        // 3. Process Redirect & Session
         window.addEventListener('load', () => {
             const fragment = new URLSearchParams(window.location.hash.slice(1));
-            const accessToken = fragment.get('access_token');
-            const tokenType = fragment.get('token_type');
+            let token = fragment.get('access_token');
+            
+            if (token) {
+                localStorage.setItem('discord_access_token', token);
+                window.history.replaceState({}, document.title, window.location.pathname);
+            } else {
+                token = localStorage.getItem('discord_access_token');
+            }
 
-            if (accessToken) {
-                // Fetch User Profile from Discord
+            if (token) {
                 fetch('discord.com', {
-                    headers: { Authorization: `${tokenType} ${accessToken}` }
+                    headers: { 'Authorization': `Bearer ${token}` }
                 })
                 .then(res => res.json())
                 .then(user => {
-                    // Update the UI elements from your existing HTML
-                    const userNameEl = document.getElementById('user-name');
-                    const userAvatarEl = document.getElementById('user-avatar');
-                    const profileContainer = document.getElementById('user-profile');
-                    const loginButton = document.getElementById('login-btn');
-                    const generateBtn = document.getElementById('generate-exam-btn');
-
-                    if (userNameEl) userNameEl.innerText = user.username;
-                    if (userAvatarEl) userAvatarEl.src = `cdn.discordapp.com{user.id}/${user.avatar}.png`;
-                    if (profileContainer) profileContainer.classList.remove('hide');
-                    if (loginButton) loginButton.classList.add('hide');
-                    if (generateBtn) generateBtn.disabled = false;
-                    
-                    console.log("Discord authentication successful for:", user.username);
+                    if (user.id) {
+                        // Update UI Elements
+                        if (loginBtn) loginBtn.classList.add('hide');
+                        if (userProfile) userProfile.classList.remove('hide');
+                        if (userName) userName.innerText = user.username;
+                        if (userAvatar) userAvatar.src = `cdn.discordapp.com{user.id}/${user.avatar}.png`;
+                        
+                        // Enable Math Exam Features
+                        if (statsDisplay) statsDisplay.innerText = `Logged in as ${user.username}. Progress is being tracked locally.`;
+                        if (generateBtn) generateBtn.disabled = false;
+                    } else {
+                        throw new Error("Invalid Token");
+                    }
                 })
-                .catch(err => console.error("Discord Auth Error:", err));
-
-                // Clean the URL hash for a professional look
-                window.history.replaceState({}, document.title, window.location.pathname);
+                .catch(err => {
+                    console.error("Auth Error:", err);
+                    localStorage.removeItem('discord_access_token');
+                });
             }
         });
     })();
